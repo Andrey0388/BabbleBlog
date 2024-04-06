@@ -4,13 +4,31 @@
 <h1>Записи в блоге</h1>
 {% for item in news%}
 <div class="col-md6 border rounded">
-    <h2>{{item.title}}</h2>
+    <h3>{{item.title}}</h3>
+    <h5>{{item.category}}</h5>
     <div>
         {{item.content}}
     </div>
     <div>
-        Автор - {{item.user.name}}, Дата написания - {{item.created_date}}
+        <div>
+            {{item.user.name}}
+        </div>
+        <div>
+            {{item.created_date}}
+        </div>
     </div>
+
+    {% if current_user.is_authenticated and current_user == item.user %}
+    <div>
+        <a href="/news/{{ item.id }}" class="btn btn-warning">
+            Изменить
+        </a>
+        <a href="/news_delete/{{ item.id }}" class="btn btn-danger">
+            Удалить
+        </a>
+    </div>
+    {% endif %}
+
 </div>
 {% endfor %}
 {% endblock %}
