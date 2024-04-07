@@ -24,26 +24,17 @@
             <div class="navbar-nav ml-auto">
                 <div class="d-flex flex-row">
                     {% if current_user.is_authenticated %}
-                    <a class="navbar-brand" href="/logout">{{ current_user.name }}</a>
+                    <a class="navbar-brand">{{ current_user.name }}</a>
+                    <a class="btn btn-danger" href="/logout">Выйти</a>
                     {% else %}
-                    <a class="btn btn-primary " href="/register">Зарегистрироваться</a>
+                    <a class="btn btn-primary" href="/register">Зарегистрироваться</a>
+                    <span>&nbsp;</span>
                     <a class="btn btn-success" href="/login">Войти</a>
                     {% endif %}
                 </div>
             </div>
         </div>
     </nav>
-    <div class="dropdown">
-        <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
-                aria-expanded="false">
-            тут
-        </button>
-        <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="#">Action</a></li>
-            <li><a class="dropdown-item" href="#">Another action</a></li>
-            <li><a class="dropdown-item" href="#">Something else here</a></li>
-        </ul>
-    </div>
 </header>
 <!-- Begin page content -->
 <main role="main" class="container">

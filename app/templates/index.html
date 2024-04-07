@@ -3,24 +3,24 @@
 {% block content %}
 <h1>Записи в блоге</h1>
 {% for item in news|reverse %}
-<div class="col-md6 border rounded">
-    <h3>{{item.title}}</h3>
-    <h5>{{item.category}}</h5>
-    <div>
-        {{item.content}}
+<div class="col-md-8 border rounded bg-light mb-4 p-4">
+    <h3>{{ item.title }}</h3>
+    <h5 class="text-muted">{{ item.category }}</h5>
+    <div class="overflow-auto bg-white p-3 rounded" style="max-height: 500px; overflow-y: auto;">
+        <p class="text-secondary" style="white-space: pre-wrap;">{{ item.content }}</p>
     </div>
-    <div>
+    <div class="mt-4 text-muted">
         <div>
-            {{item.user.name}}
+            Автор: {{ item.user.name }}
         </div>
         <div>
-            {{item.created_date}}
+            Дата создания: {{ item.created_date.strftime("%d.%m.%Y %H:%M") }}
         </div>
     </div>
 
     {% if current_user.is_authenticated and current_user == item.user %}
-    <div>
-        <a href="/news/{{ item.id }}" class="btn btn-warning">
+    <div class="mt-4">
+        <a href="/news/{{ item.id }}" class="btn btn-warning me-2">
             Изменить
         </a>
         <a href="/news_delete/{{ item.id }}" class="btn btn-danger">
@@ -28,7 +28,6 @@
         </a>
     </div>
     {% endif %}
-
 </div>
 {% endfor %}
 {% endblock %}
