@@ -2,7 +2,7 @@
 
 {% block content %}
 <h1>Записи в блоге</h1>
-{% for item in news%}
+{% for item in news|reverse %}
 <div class="col-md6 border rounded">
     <h3>{{item.title}}</h3>
     <h5>{{item.category}}</h5>
