@@ -9,6 +9,7 @@
             integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
             crossorigin="anonymous"></script>
     <link rel="stylesheet" href="\static\css\font.css">
+    <script src="/static/js/search.js"></script>
     <title>{{title}}</title>
 </head>
 <body>
@@ -21,6 +22,11 @@
                 <a href="news" class="btn btn-info">Создать блог</a></li>
                 {% endif %}
             </div>
+            <form class="d-flex" role="search">
+                <input id="searchInput" class="form-control me-2" type="search" placeholder="Search"
+                       aria-label="Search">
+                <button class="btn btn-outline-success" type="button" onclick="search()">Search</button>
+            </form>
             <div class="navbar-nav ml-auto">
                 <div class="d-flex flex-row">
                     {% if current_user.is_authenticated %}
