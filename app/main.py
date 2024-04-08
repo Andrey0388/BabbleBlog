@@ -3,7 +3,7 @@ from flask import Flask, render_template, redirect, abort, request
 from app.forms.news import NewsForm
 from data import db_session
 from data.users import User
-from data.news import News
+from data.news import News, Like
 from forms.user import RegisterForm
 from forms.loginform import LoginForm
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
@@ -30,7 +30,12 @@ def index():
             (News.user == current_user) | (News.is_private != True))
     else:
         news = db_sess.query(News).filter(News.is_private != True)
-    return render_template("index.html", news=news)
+
+    likes_count = {}
+    for item in news:
+        likes_count[item.id] = db_sess.query(Like).filter(Like.news_id == item.id).count()
+
+    return render_template('index.html', news=news, likes_count=likes_count)
 
 
 @app.route('/register', methods=['GET', 'POST'])

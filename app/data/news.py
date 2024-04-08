@@ -1,6 +1,7 @@
 import datetime
 import sqlalchemy
 from sqlalchemy import orm
+from sqlalchemy.orm import relationship
 
 from .db_session import SqlAlchemyBase
 
@@ -20,3 +21,15 @@ class News(SqlAlchemyBase):
     user_id = sqlalchemy.Column(sqlalchemy.Integer,
                                 sqlalchemy.ForeignKey("users.id"))
     user = orm.relationship('User')
+
+    likes = relationship('Like', backref='news')
+
+
+class Like(SqlAlchemyBase):
+    __tablename__ = 'likes'
+
+    id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True, autoincrement=True)
+    user_id = sqlalchemy.Column(sqlalchemy.Integer, sqlalchemy.ForeignKey("users.id"))
+    user = relationship('User')
+
+    news_id = sqlalchemy.Column(sqlalchemy.Integer, sqlalchemy.ForeignKey("news.id"))

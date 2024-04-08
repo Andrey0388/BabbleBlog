@@ -19,6 +19,14 @@
         </div>
     </div>
 
+    <div class="mt-4">
+        <button class="btn btn-primary like-btn">
+            <i class="fas fa-heart"></i> Нравится
+        </button>
+        <span class="ms-2 align-middle">{{ likes_count.get(item.id, 0) }}</span>
+    </div>
+
+
     {% if current_user.is_authenticated and current_user == item.user %}
     <div class="mt-4">
         <a href="/news/{{ item.id }}" class="btn btn-warning me-2">
