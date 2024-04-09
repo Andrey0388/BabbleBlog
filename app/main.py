@@ -1,5 +1,7 @@
-from flask import Flask, render_template, redirect, abort, request
+from flask import Flask, render_template, redirect, abort, request, jsonify
+from sqlalchemy import create_engine
 
+from app.data.db_session import create_session
 from app.forms.news import NewsForm
 from data import db_session
 from data.users import User
@@ -35,7 +37,10 @@ def index():
     for item in news:
         likes_count[item.id] = db_sess.query(Like).filter(Like.news_id == item.id).count()
 
-    return render_template('index.html', news=news, likes_count=likes_count)
+    like_user_ids = {}
+    for item in news:
+        like_user_ids[item] = [like.user_id for like in item.likes]
+    return render_template('index.html', news=news, likes_count=likes_count, like_user_ids=like_user_ids)
 
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -153,6 +158,39 @@ def news_delete(id):
     else:
         abort(404)
     return redirect('/')
+
+
+@app.route('/toggle_like', methods=['POST'])
+@login_required
+def toggle_like():
+    data = request.json
+    news_id = data.get('news_id')
+    user_id = current_user.id
+
+    if not news_id:
+        return jsonify({'error': 'News ID is required'}), 400
+
+    db_sess = db_session.create_session()
+    news_item = db_sess.query(News).get(news_id)
+
+    if not news_item:
+        return jsonify({'error': 'News not found'}), 404
+
+    if user_id in [like.user_id for like in news_item.likes]:
+        # Удаляем лайк
+        like_to_remove = next((like for like in news_item.likes if like.user_id == user_id), None)
+        if like_to_remove:
+            db_sess.delete(like_to_remove)
+            db_sess.commit()
+            return jsonify({'action': 'unliked'}), 200
+    else:
+        # Добавляем лайк
+        like = Like(user_id=user_id, news_id=news_id)
+        db_sess.add(like)
+        db_sess.commit()
+        return jsonify({'action': 'liked'}), 200
+
+    return jsonify({'error': 'An error occurred'}), 500
 
 
 def main():

@@ -19,13 +19,31 @@
         </div>
     </div>
 
+    {% if current_user.is_authenticated %}
+    {% if current_user.id in like_user_ids[item] %}
     <div class="mt-4">
-        <button class="btn btn-primary like-btn">
-            <i class="fas fa-heart"></i> Нравится
+        <button class="btn btn-primary like-btn" data-news-id="{{ item.id }}" data-action="unlike">Отменить
         </button>
-        <span class="ms-2 align-middle">{{ likes_count.get(item.id, 0) }}</span>
+        <i class="far fa-thumbs-up text-primary ms-2 me-1"></i>
+        <span class="likes-count" data-news-id="{{ item.id }}">{{ likes_count.get(item.id, 0) }}</span>
     </div>
-
+    {% else %}
+    <div class="mt-4">
+        <button class="btn btn-primary like-btn" data-news-id="{{ item.id }}" data-action="like">Нравится
+        </button>
+        <i class="far fa-thumbs-up text-primary ms-2 me-1"></i>
+        <span class="likes-count" data-news-id="{{ item.id }}">{{ likes_count.get(item.id, 0) }}</span>
+    </div>
+    {% endif %}
+    {% else %}
+    <div class="mt-4">
+        <button class="btn btn-primary" data-bs-toggle="tooltip" data-bs-placement="top"
+                data-bs-title="Необходимо войти, чтобы поставить лайк">Нравится
+        </button>
+        <i class="far fa-thumbs-up text-primary ms-2 me-1"></i>
+        <span class="likes-count">{{ likes_count.get(item.id, 0) }}</span>
+    </div>
+    {% endif %}
 
     {% if current_user.is_authenticated and current_user == item.user %}
     <div class="mt-4">
@@ -39,4 +57,12 @@
     {% endif %}
 </div>
 {% endfor %}
+
+<script>
+    $(document).ready(function(){
+        $('[data-bs-toggle="tooltip"]').tooltip();
+    });
+
+
+</script>
 {% endblock %}
