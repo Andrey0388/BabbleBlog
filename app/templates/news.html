@@ -24,7 +24,7 @@
     </p>
     <p>
         {{ form.content.label }}<br>
-        {{ form.content(class="form-control", maxlength="2000") }}<br>
+        {{ form.content(class="form-control", maxlength="10000") }}<br>
         {% for error in form.content.errors %}
     <p content="alert alert-danger" role="alert">
         {{ error }}

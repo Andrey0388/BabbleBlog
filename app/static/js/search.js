@@ -1,5 +1,6 @@
 function search() {
-    var searchText = document.getElementById('searchInput').value;
+    var searchText = document.getElementById('searchInput').value.trim(); // Убираем лишние пробелы
+    if (searchText === '') return; // Если строка поиска пуста, выходим из функции
     var elements = document.querySelectorAll('*');
 
     // Удаляем предыдущую подсветку, если она есть
@@ -9,6 +10,7 @@ function search() {
         highlightTextInElement(element, searchText);
     });
 }
+
 
 function highlightTextInElement(element, searchText) {
     if (element.tagName !== 'SCRIPT' && element.tagName !== 'STYLE') {

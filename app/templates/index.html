@@ -3,9 +3,8 @@
 {% block content %}
 <h1>Записи в блоге</h1>
 {% for item in news|reverse %}
-<div class="col-md-8 border rounded bg-light mb-4 p-4">
-    <h3>{{ item.title }}</h3>
-    <h5 class="text-muted">{{ item.category }}</h5>
+<div class="col-lg-12 border rounded bg-light mb-4 p-4"> <!-- Изменен класс на col-lg-11 -->
+    <h3>{{ item.title }} <span class="badge bg-custom-light-blue text-dark">{{ item.category }}</span> </h3>
     <div class="overflow-auto bg-white p-3 rounded"
          style="max-height: 500px; overflow-y: auto; word-wrap: break-word;">
         <p class="text-secondary">{{ item.content }}</p>
@@ -62,7 +61,5 @@
     $(document).ready(function(){
         $('[data-bs-toggle="tooltip"]').tooltip();
     });
-
-
 </script>
 {% endblock %}
