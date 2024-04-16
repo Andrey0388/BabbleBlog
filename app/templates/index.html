@@ -1,10 +1,59 @@
 {% extends "base.html" %}
 
 {% block content %}
+<div style="height: 20px;"></div>
+
 <h1>Записи в блоге</h1>
-{% for item in news|reverse %}
+<!-- Форма с фильтрами -->
+<style>
+    .filter-form {
+        margin-bottom: 20px; /* Настройте значение отступа по вашему усмотрению */
+    }
+
+
+</style>
+
+<!-- Форма с фильтрами -->
+<form class="filter-form" method="GET" action="{{ url_for('index') }}">
+    <div class="row g-3 align-items-center">
+        <div class="col-md-4">
+            <label for="sort_order" class="form-label">Сортировать по дате:</label>
+            <select class="form-select" id="sort_order" name="order">
+                <option value="newest" {% if order==
+                'newest' %} selected {% endif %}>Сначала новые</option>
+                <option value="oldest" {% if order==
+                'oldest' %} selected {% endif %}>Сначала старые</option>
+            </select>
+        </div>
+        <div class="col-md-4">
+            <label for="sort_likes" class="form-label">Сортировать по лайкам:</label>
+            <select class="form-select" id="sort_likes" name="likes_order">
+                <option value="most_liked" {% if likes_order==
+                'most_liked' %} selected {% endif %}>Сначала популярные</option>
+                <option value="least_liked" {% if likes_order==
+                'least_liked' %} selected {% endif %}>Сначала непопулярные</option>
+            </select>
+        </div>
+        <div class="col-md-6">
+            <div class="input-group mb-3">
+                <label class="input-group-text" for="filterBy">Фильтровать по (не работает):</label>
+                <select class="form-select" id="filterBy" name="filterBy">
+                    <option value="all" {% if filterBy == 'all' %} selected {% endif %}>Все записи</option>
+                    <option value="my_posts" {% if filterBy == 'my_posts' %} selected {% endif %}>Только мои записи</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div style="height: 30px;"></div>
+            <button type="submit" class="btn btn-primary">Применить</button>
+        </div>
+    </div>
+</form>
+
+
+{% for item in news %}
 <div class="col-lg-12 border rounded bg-light mb-4 p-4"> <!-- Изменен класс на col-lg-11 -->
-    <h3>{{ item.title }} <span class="badge bg-custom-light-blue text-dark">{{ item.category }}</span> </h3>
+    <h3>{{ item.title }} <span class="badge bg-custom-light-blue text-dark">{{ item.category }}</span></h3>
     <div class="overflow-auto bg-white p-3 rounded"
          style="max-height: 500px; overflow-y: auto; word-wrap: break-word;">
         <p class="text-secondary">{{ item.content }}</p>
@@ -61,5 +110,9 @@
     $(document).ready(function(){
         $('[data-bs-toggle="tooltip"]').tooltip();
     });
+
+
+
+
 </script>
 {% endblock %}

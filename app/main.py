@@ -33,6 +33,30 @@ def index():
     else:
         news = db_sess.query(News).filter(News.is_private != True)
 
+    order = request.args.get('order', 'newest')
+    if order == 'newest':
+        news = db_sess.query(News).order_by(News.created_date.desc()).all()
+    elif order == 'oldest':
+        news = db_sess.query(News).order_by(News.created_date).all()
+    else:
+        pass
+
+    likes_order = request.args.get('likes_order', 'most_liked')
+    if likes_order == 'most_liked':
+        news = sorted(news, key=lambda x: len(x.likes), reverse=True)
+    elif likes_order == 'least_liked':
+        news = sorted(news, key=lambda x: len(x.likes))
+    else:
+        pass
+
+    filterBy = request.args.get('filterBy', 'all')
+    if filterBy == 'filterBy':
+        news = news.filter(key=lambda x: x.user == current_user)
+    elif filterBy == 'all':
+        pass
+    else:
+        pass
+
     likes_count = {}
     for item in news:
         likes_count[item.id] = db_sess.query(Like).filter(Like.news_id == item.id).count()
@@ -40,7 +64,7 @@ def index():
     like_user_ids = {}
     for item in news:
         like_user_ids[item] = [like.user_id for like in item.likes]
-    return render_template('index.html', news=news, likes_count=likes_count, like_user_ids=like_user_ids)
+    return render_template('index.html', news=news, likes_count=likes_count, like_user_ids=like_user_ids, order=order, likes_order=likes_order, filterBy=filterBy)
 
 
 @app.route('/register', methods=['GET', 'POST'])
