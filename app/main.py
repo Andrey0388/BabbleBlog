@@ -35,9 +35,9 @@ def index():
 
     order = request.args.get('order', 'newest')
     if order == 'newest':
-        news = db_sess.query(News).order_by(News.created_date.desc()).all()
+        news = sorted(news, key=lambda x: x.created_date, reverse=True)
     elif order == 'oldest':
-        news = db_sess.query(News).order_by(News.created_date).all()
+        news = sorted(news, key=lambda x: x.created_date)
     else:
         pass
 
@@ -50,8 +50,8 @@ def index():
         pass
 
     filterBy = request.args.get('filterBy', 'all')
-    if filterBy == 'filterBy':
-        news = news.filter(key=lambda x: x.user == current_user)
+    if filterBy == 'my_posts':
+        news = list(filter(lambda x: x.user.name == current_user.name, news))
     elif filterBy == 'all':
         pass
     else:
@@ -64,7 +64,8 @@ def index():
     like_user_ids = {}
     for item in news:
         like_user_ids[item] = [like.user_id for like in item.likes]
-    return render_template('index.html', news=news, likes_count=likes_count, like_user_ids=like_user_ids, order=order, likes_order=likes_order, filterBy=filterBy)
+    return render_template('index.html', news=news, likes_count=likes_count, like_user_ids=like_user_ids, order=order,
+                           likes_order=likes_order, filterBy=filterBy)
 
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -80,6 +81,10 @@ def reqister():
             return render_template('register.html', title='Регистрация',
                                    form=form,
                                    message="Такой пользователь уже есть")
+        if db_sess.query(User).filter(User.name == form.name.data).first():
+            return render_template('register.html', title='Регистрация',
+                                   form=form,
+                                   message="Пользователь с таким никнеймом уже существует")
         user = User(
             name=form.name.data,
             email=form.email.data,
