@@ -223,7 +223,7 @@ def toggle_like():
 
 
 def main():
-    db_session.global_init("app/db/blogs.db")
+    db_session.global_init("db/blogs.db")
     app.run()
 
 
