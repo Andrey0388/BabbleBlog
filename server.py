@@ -1,14 +1,12 @@
 from flask import Flask, render_template, redirect, abort, request, jsonify
-from sqlalchemy import create_engine
 
-from app.data.db_session import create_session
-from app.forms.news import NewsForm
+from forms.news import NewsForm
 from data import db_session
 from data.users import User
 from data.news import News, Like
 from forms.user import RegisterForm
 from forms.loginform import LoginForm
-from flask_login import LoginManager, login_user, login_required, logout_user, current_user
+from flask_login import LoginManager, login_user, logout_user, current_user
 from flask_login import login_required
 
 app = Flask(__name__)
